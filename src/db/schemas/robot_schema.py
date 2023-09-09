@@ -21,4 +21,4 @@ class Route(BaseModel):
     name: Optional[str]
     desc: Optional[str]
     length: Optional[float]
-    timeDuration: Optional[String]
+    timeDuration: Optional[str]

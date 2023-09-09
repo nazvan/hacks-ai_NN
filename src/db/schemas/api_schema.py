@@ -4,7 +4,6 @@ from uuid import UUID, uuid4
 
 
 class RoutePoint(BaseModel):
-    routeId: Optional[str]
     robotId: Optional[str]
     latitude: Optional[float]
     longitude: Optional[float]

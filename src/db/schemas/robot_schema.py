@@ -20,3 +20,5 @@ class Route(BaseModel):
     robotId: str
     name: Optional[str]
     desc: Optional[str]
+    length: Optional[float]
+    timeDuration: Optional[String]

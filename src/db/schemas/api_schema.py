@@ -11,3 +11,15 @@ class RoutePoint(BaseModel):
 
     class Config:
         orm_mode = True
+
+class Defect(BaseModel):
+    robotId: Optional[str]
+    latitude: Optional[float]
+    longitude: Optional[float]
+    timestamp: Optional[int]
+    imageId: Optional[str]
+    type: Optional[str]
+    
+
+    class Config:
+        orm_mode = True

@@ -29,6 +29,7 @@ class Route(Base): ## Маршруты
     desc = Column(String, nullable=True)  # Описание маршрута
     length = Column(String, nullable=True)  # длина маршрута, км
     timeDuration = Column(String, nullable=True)  # Длителность маршрута
+    isActive = Column(Boolean, nullable=True)  # Активен ли в данный момент
 
     robotId = Column(String, ForeignKey("robot.id"), nullable=False)
 

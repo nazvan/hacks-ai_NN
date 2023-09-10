@@ -1,11 +1,10 @@
 import uvicorn
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, WebSocket
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
-from routers.robot_router import robot_router, routes_router
-from routers.api_router import api_router
+
 # from routers.video_router import VIDEO_PATH
 
 app = FastAPI(version="0.3.0")
@@ -18,7 +17,14 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
 )
 
-routers = [robot_router, routes_router, api_router]
+from routers.robot_router import robot_router, routes_router, defect_router
+from routers.api_router import api_router
+from fastapi_socketio import SocketManager
+import time
+
+
+
+routers = [robot_router, routes_router, api_router, defect_router]
 
 for router in routers:
     app.include_router(router)
@@ -34,11 +40,11 @@ app.add_middleware(
 )
 
 
-# @app.on_event("startup")
-# async def startup():
-#     async with engine.begin() as conn:
-#         await conn.run_sync(Base.metadata.drop_all)
-#         await conn.run_sync(Base.metadata.create_all)
+@app.on_event("startup")
+async def startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
 
 
 if __name__ == "__main__":

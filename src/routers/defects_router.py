@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, Query
-from sqlalchemy import select, delete, update
+from sqlalchemy import select, delete
 
 from dependencies import get_session
 from db.config import async_session
@@ -9,13 +9,10 @@ from db.config import async_session
 from db.schemas.robot_schema import GetRobots as GetRobotsSchema
 from db.schemas.robot_schema import Robot as RobotSchema
 from db.schemas.robot_schema import Route as RouteSchema
-from db.schemas.robot_schema import ChangeDefect as ChangeDefectSchema
-
 
 from db.models.robot_model import Robot as RobotsModel
 from db.models.robot_model import Route as RoutesModel
 from db.models.robot_model import RoutePoint as PointsModel
-from db.models.defect_model import Defect as DefectModel
 
 
 robot_router = APIRouter(
@@ -26,11 +23,6 @@ robot_router = APIRouter(
 routes_router = APIRouter(
     prefix="/routes",
     tags=["Routes"],
-)
-
-defect_router = APIRouter(
-    prefix="/defects",
-    tags=["Defects"],
 )
 
 
@@ -92,25 +84,12 @@ async def delete_route_by_route_id(route_id: str, session: async_session = Depen
 
 @routes_router.get("/data/{routeId}")
 async def get_route_data(routeId: str, session: async_session = Depends(get_session)):
+    print('HEUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU')
     q = select(PointsModel).where(PointsModel.routeId == routeId)
     result = await session.execute(q)
     data = result.scalars().all()
     print(data)
     return data
-
-@defect_router.get("")
-async def get_all_defects(session: async_session = Depends(get_session)):
-    q = select(DefectModel)
-    result = await session.execute(q)
-    data = result.scalars().all()
-    return data
-
-@defect_router.post("/change_status")
-async def change_defect_status(changer: ChangeDefectSchema,session: async_session = Depends(get_session)):
-    stmt = (update(DefectModel).where(DefectModel.id==changer.id).values({'type':changer.type}))
-    result = await session.execute(stmt)
-    return {"status":200}
-
 
 # @router.delete("/")
 # async def delete_technic_class(video: TechnicSchema, session: async_session = Depends(get_session)):
